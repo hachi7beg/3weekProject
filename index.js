@@ -14,9 +14,24 @@ class Square {
     ];
     this.timer = new Timer();
   }
+  getValues(){
+    return this.values
+  }
 }
 
 window.onload = () => {
   const table = document.getElementById("table");
   console.log(table); // ??
+  const getValue = new Square().getValues()
+  console.log(getValue)
+  for (value of getValue){
+    const tr = document.createElement("tr")
+    for (num of value){
+        const td = document.createElement("td")
+        td.innerText = num
+        td.id = "cell-" + String(num-1)
+        tr.append(td)
+    }
+    table.append(tr)
+  }
 };
