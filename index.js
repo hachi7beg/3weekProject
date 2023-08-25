@@ -8,10 +8,11 @@ class Timer {
     if(!this.active){
       this.intervalId = setInterval(this.randomCellNum, 100, num)
       this.active = true
-      console.log(this.intervalId)
+      // console.log(this.intervalId)
     }
   }
   randomCellNum =(cellnum) =>{
+  // console.log(cellnum)
   const randomNum = Math.floor(Math.random()*cellnum)
   if (this.remberNum == randomNum){
       this.randomCellNum(cellnum)
@@ -36,20 +37,21 @@ class Timer {
 }
 
 class Square {
-  constructor(cellNumberData) {
+  constructor(cellNumberData, rouletSize) {
     // this.values = [
     //   [1, 2, 3],
     //   [4, 5, 6],
     //   [7, 8, 9],
     // ];
     this.value = cellNumberData
+    this.rouletSize = rouletSize
     this.timer = new Timer();
   }
   getValues = () => {
     return this.value
   }
   startTimer = () => {
-    this.timer.start(9)
+    this.timer.start(this.rouletSize)
   }
   stopTimer = () => {
     this.timer.stop()
@@ -69,10 +71,10 @@ window.onload = () => {
   const cellNumberArr = createArry(rowlength,collength)
   arrayShuffle(cellNumberArr)
   const cellNumberData = splitArray(cellNumberArr,rowlength);
-  const square = new Square(cellNumberData)
+  const square = new Square(cellNumberData, rowlength*collength)
   const getValue = square.getValues()
 
-  startButton.addEventListener("click", square.startTimer)
+  startButton.addEventListener("click", square.startTimer.bind(square))
   const stopButton = document.getElementById("stop");
   stopButton.addEventListener("click", square.stopTimer)
   const resetButton = document.getElementById("reset");
