@@ -33,20 +33,20 @@ class Timer {
       this.active = false
     }
   }
-
 }
 
 class Square {
-  constructor() {
-    this.values = [
-      [1, 2, 3],
-      [4, 5, 6],
-      [7, 8, 9],
-    ];
+  constructor(cellNumberData) {
+    // this.values = [
+    //   [1, 2, 3],
+    //   [4, 5, 6],
+    //   [7, 8, 9],
+    // ];
+    this.value = cellNumberData
     this.timer = new Timer();
   }
   getValues = () => {
-    return this.values
+    return this.value
   }
   startTimer = () => {
     this.timer.start(9)
@@ -62,17 +62,29 @@ class Square {
 window.onload = () => {
   const startButton = document.getElementById("start");
   const table = document.getElementById("table");
-  console.log(table); // ??
-  const square = new Square()
+  const maxsize = 50;
+  const ratio = 5
+  const rowlength = Math.floor(Math.random()*maxsize/ratio +1);
+  const collength = Math.floor(Math.random()*maxsize/ratio +1);
+  const cellNumberArr = createArry(rowlength,collength)
+  arrayShuffle(cellNumberArr)
+  const cellNumberData = splitArray(cellNumberArr,rowlength);
+  const square = new Square(cellNumberData)
   const getValue = square.getValues()
-  console.log(getValue)
-  createTableElement(getValue, table)
+
   startButton.addEventListener("click", square.startTimer)
   const stopButton = document.getElementById("stop");
   stopButton.addEventListener("click", square.stopTimer)
   const resetButton = document.getElementById("reset");
   resetButton.addEventListener("click", square.resetTimer)
+
+  if (maxsize >= rowlength*collength){    
+    createTableElement(getValue, table)
+  } else {
+    console.log("the size of which is larger than the expected max value")
+  }
 };
+
 
 function createTableElement(getValue, table){
   for (value of getValue){
@@ -85,4 +97,34 @@ function createTableElement(getValue, table){
     }
     table.append(tr)
   }
+}
+
+function createArry(rowlength, collength){
+  const arr =[]
+  for (var i=1; i<=rowlength*collength; i++ ){
+    arr.push(i)
+  }
+  return arr
+}
+
+function arrayShuffle(array) {
+  for(let i = (array.length - 1); 0 < i; i--){
+
+    // 0〜(i+1)の範囲で値を取得
+    let r = Math.floor(Math.random() * (i + 1));
+
+    // 要素の並び替えを実行
+    let tmp = array[i];
+    array[i] = array[r];
+    array[r] = tmp;
+  }
+  return array;
+}
+
+function splitArray(array, part) {
+  var tmp = [];
+  for(var i = 0; i < array.length; i += part) {
+      tmp.push(array.slice(i, i + part));
+  }
+  return tmp;
 }
